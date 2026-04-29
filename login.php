@@ -15,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($haslo, $u["hash_haslo"])) {
             $_SESSION["id"] = $u["id_u"];
             $_SESSION["imie"] = $u["imie"];
+            $_SESSION["nazwisko"] = $u["nazwisko"];
             $_SESSION["czy_nauczyciel"] = $u["czy_nauczyciel"];
             $_SESSION["id_k"] = $u["id_k"];
 

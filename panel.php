@@ -6,8 +6,6 @@ if (!isset($_SESSION["id"])) {
     header("Location: login.php");
     exit;
 }
-
-echo "<br><a href='logout.php'>Wyloguj</a>";
 ?>
 
 <!DOCTYPE html>
@@ -16,33 +14,67 @@ echo "<br><a href='logout.php'>Wyloguj</a>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="panel.css">
 </head>
 <body>
-    <nav></nav>
+    <nav>
+        <h1>Dziennik24</h1>    
+        <?php 
+            if ($_SESSION["czy_nauczyciel"]) {
+                echo "<a href='nauczyciel/dodaj_zadanie.php'>Dodaj zadanie</a>";
+                echo "<a href='nauczyciel/lista_odpowiedzi.php'>Sprawdź odpowiedzi</a>";
+            } else {
+                echo "<a href='uczen/moje_zadania.php'>Moje zadania</a>";
+            }
+            echo "<div>";
+            echo "<h2>".$_SESSION["imie"]." ".$_SESSION["nazwisko"]."</h2>";    
+            echo "<a href='logout.php'>Wyloguj</a>";
+            echo "</div>"
+        ?>
+    </nav>
     <main>
-        <div class="main_right">
-            <?php 
-                echo "<h1>Witaj ".$_SESSION["imie"]."</h1>";    
+        <div class="main_left">
+            <?php
                 if ($_SESSION["czy_nauczyciel"]) {
-                    echo "<a href='nauczyciel/dodaj_zadanie.php'>Dodaj zadanie</a><br>";
-                    echo "<a href='nauczyciel/lista_odpowiedzi.php'>Sprawdź odpowiedzi</a><br>";
-                } else {
-                    echo "<a href='uczen/moje_zadania.php'>Moje zadania</a><br>";
+                    if(isset($_GET["id_k"]))
+                    {
+                        $id_k = (int)$_GET["id_k"];
+
+                        $sql = "SELECT * FROM zadaniae WHERE id_k=$id_k";
+                        $wynik = mysqli_query($conn, $sql);
+
+                        if(mysqli_num_rows($wynik) == 0)
+                        {
+                            echo "Brak zadań";
+                        }
+                        else
+                        {
+                            while($zadanie = mysqli_fetch_assoc($wynik))
+                            {
+                                echo "<div id='zadanie'>";
+                                echo "<h3>".$zadanie["tytul"]."</h3>";
+                                echo "<p>".$zadanie["tresc"]."</p>";
+                                echo "Termin: ".$zadanie["data_zakonczenia"];
+                                echo "</div>";
+                            }
+                        }
+                    }
                 }
             ?>
         </div>
-        <div class="main_left">
+        <div class="main_right">
             <?php 
-                $wynik = mysqli_query($conn, "SELECT * FROM klasa");
+                if ($_SESSION["czy_nauczyciel"]) {
+                    $wynik = mysqli_query($conn, "SELECT * FROM klasa");
 
-                echo "<h2>Lista klas</h2>";
+                    echo "<h2>Lista klas</h2>";
 
-                while($klasa = mysqli_fetch_assoc($wynik))
-                {
-                    echo "<a href='klasy.php?id_k=".$klasa["id_k"]."'>";
-                    echo $klasa["nazwa"];
-                    echo "</a><br>";
+                    while($klasa = mysqli_fetch_assoc($wynik))
+                    {
+                        echo "<a href='panel.php?id_k=".$klasa["id_k"]."'>";
+                        echo $klasa["nazwa"];
+                        echo "</a><br>";
+                    }
                 }
             ?>
         </div>
