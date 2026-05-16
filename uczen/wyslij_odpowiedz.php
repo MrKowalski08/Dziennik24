@@ -17,8 +17,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<form method="POST">
-    Odpowiedź:<br>
-    <textarea name="tresc"></textarea><br><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="wyslij_odpowiedz.css">
+</head>
+<body>
+    <form method="POST">
+        Odpowiedź:<br>
+        <textarea name="tresc"></textarea><br><br>
     <button>Wyślij</button>
 </form>
+</body>
+</html>
